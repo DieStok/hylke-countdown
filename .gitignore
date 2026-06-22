@@ -1,0 +1,8 @@
+node_modules/
+.vercel/
+*.gif
+!*/.gitkeep
+test*.gif
+out.gif
+preview_*.png
+gif_*.png

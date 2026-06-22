@@ -1,0 +1,6 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    { "source": "/api/countdown.gif", "destination": "/api/countdown.gif.js" }
+  ]
+}

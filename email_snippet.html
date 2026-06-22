@@ -1,0 +1,32 @@
+<!--
+  EMAIL EMBED SNIPPET — live countdown for Hylke's PhD defence
+  ============================================================
+  Paste this block into the invitation / reminder / confirmation emails.
+
+  HOW IT WORKS
+  - The <img> points at the serverless GIF endpoint. Each time the email is
+    opened, the endpoint renders a fresh animated GIF counting down from the
+    current moment, so it is always correct. (Email clients can't run JS, so a
+    server-rendered GIF is the only way to get a live timer inside an email.)
+  - Outlook shows only the GIF's first frame — still correct, just not animated.
+  - The whole block is a link to the full live countdown website.
+
+  SETUP
+  1. Deploy this repo to Vercel (see README).
+  2. Replace BOTH occurrences of  https://YOUR-APP.vercel.app  below with your
+     real deployment URL.
+-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f5f0e1;">
+  <tr>
+    <td align="center" style="padding: 24px 16px;">
+      <a href="https://YOUR-APP.vercel.app" target="_blank" style="text-decoration:none; display:inline-block;">
+        <img src="https://YOUR-APP.vercel.app/api/countdown.gif"
+             width="600" alt="Counting down to Dr. Hylke - 1 July 2026, Wageningen"
+             style="display:block; width:100%; max-width:600px; height:auto; border-radius:8px; box-shadow:0 4px 20px rgba(31,77,46,0.15);">
+      </a>
+      <p style="margin:10px 0 0 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; color:#1f4d2e;">
+        <a href="https://YOUR-APP.vercel.app" target="_blank" style="color:#a82c2c; text-decoration:none; border-bottom:1px solid #a82c2c;">Open the live countdown &rarr;</a>
+      </p>
+    </td>
+  </tr>
+</table>

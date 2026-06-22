@@ -1,0 +1,11 @@
+{
+  "name": "hylke-countdown",
+  "version": "1.0.0",
+  "description": "Live countdown website + in-email countdown GIF for Hylke Kortenbosch's PhD defence (1 July 2026).",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "@napi-rs/canvas": "^1.0.0",
+    "gifenc": "^1.0.3"
+  }
+}

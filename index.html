@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Counting down to Dr. Hylke &middot; 1 July 2026</title>
+<meta name="description" content="A live countdown to the PhD defence of Hylke Hessel Kortenbosch, Wageningen, 1 July 2026.">
+<style>
+  :root{
+    --cream:#f5f0e1; --panel:#faf8f3; --card:#ede4c9; --forest:#1f4d2e;
+    --sage:#8fb872; --sage-light:#a3c585; --terra:#a82c2c; --ink:#2a2a2a;
+    --gold:#c8a24a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:Georgia,'Times New Roman',serif; color:var(--ink);
+    background:
+      radial-gradient(ellipse 120% 80% at 50% -10%, #25593a 0%, var(--forest) 38%, #163a22 100%);
+    min-height:100vh; overflow-x:hidden; position:relative;
+  }
+  /* ambient drifting spores */
+  .spores{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;}
+  .spore{
+    position:absolute; bottom:-20px; border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, var(--sage-light), var(--sage) 60%, transparent 72%);
+    opacity:0; animation:rise linear infinite;
+  }
+  @keyframes rise{
+    0%{transform:translateY(0) translateX(0) scale(1); opacity:0;}
+    10%{opacity:.55;}
+    50%{opacity:.5;}
+    90%{opacity:.35;}
+    100%{transform:translateY(-105vh) translateX(var(--drift,30px)) scale(.6); opacity:0;}
+  }
+
+  .wrap{position:relative; z-index:1; max-width:880px; margin:0 auto; padding:46px 22px 60px;
+        min-height:100vh; display:flex; flex-direction:column; justify-content:center;}
+
+  /* signature: a petri-dish ring (microbiology nod) framing the clock */
+  .dish{position:relative;}
+  .dish::before{
+    content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:min(112%,680px); aspect-ratio:1/1; border-radius:50%;
+    border:1px solid rgba(163,197,133,.28);
+    box-shadow:0 0 0 12px rgba(163,197,133,.05), inset 0 0 80px rgba(163,197,133,.06);
+    z-index:-1; pointer-events:none;
+  }
+  .dish::after{
+    content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:min(132%,820px); aspect-ratio:1/1; border-radius:50%;
+    border:1px dashed rgba(163,197,133,.16); z-index:-1; pointer-events:none;
+  }
+
+  .eyebrow{margin:0 0 14px; text-align:center; letter-spacing:6px; text-transform:uppercase;
+           font-size:13px; color:var(--sage-light);}
+  .eyebrow .leaf{color:var(--sage); margin:0 10px;}
+
+  h1{margin:0; text-align:center; color:var(--panel); font-weight:normal;
+     font-size:clamp(30px,7vw,58px); line-height:1.06; letter-spacing:.5px;}
+  h1 .accent{font-style:italic; color:var(--gold);}
+  .subtitle{margin:16px auto 0; text-align:center; max-width:560px; color:#e7e0cb;
+            font-style:italic; font-size:clamp(15px,2.4vw,19px); line-height:1.5;}
+
+  .rule{display:flex; align-items:center; justify-content:center; gap:16px; margin:30px auto 4px;
+        max-width:280px; color:var(--sage-light);}
+  .rule::before,.rule::after{content:""; height:1px; flex:1; background:var(--sage-light); opacity:.4;}
+  .rule span{font-size:18px;}
+
+  /* countdown tiles */
+  .clock{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:34px auto 0; max-width:620px;}
+  .tile{
+    background:linear-gradient(180deg,var(--panel),#efe9d8);
+    border:1px solid rgba(255,255,255,.5);
+    border-radius:14px; padding:20px 8px 14px; text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.7);
+    position:relative; overflow:hidden;
+  }
+  .tile::after{content:""; position:absolute; left:0; right:0; top:50%; height:1px;
+               background:rgba(31,77,46,.10);}
+  .num{font-size:clamp(34px,8vw,62px); line-height:1; color:var(--forest);
+       font-variant-numeric:tabular-nums; letter-spacing:1px; display:block;
+       transition:transform .15s ease;}
+  .num.tick{transform:translateY(-3px);}
+  .lbl{display:block; margin-top:10px; font-size:11px; letter-spacing:3px;
+       text-transform:uppercase; color:var(--terra);}
+
+  .meta{margin:30px auto 0; text-align:center; color:#e7e0cb; font-size:15px; line-height:1.7;}
+  .meta strong{color:var(--panel); font-weight:normal; border-bottom:1px dotted var(--sage-light);}
+  .meta .where{display:block; margin-top:6px; font-size:13px; color:var(--sage-light); letter-spacing:.5px;}
+
+  .thesis{margin:40px auto 0; max-width:540px; text-align:center;
+           color:#d7cfb6; font-size:13px; line-height:1.7; font-style:italic;}
+  .thesis .title{font-style:normal; color:var(--panel);}
+
+  .footer{margin-top:auto; padding-top:46px; text-align:center; color:var(--sage-light);
+          font-size:11px; letter-spacing:2px; text-transform:uppercase;}
+
+  /* celebration state */
+  body.done{background:radial-gradient(ellipse 130% 90% at 50% 0%, #2a6a42 0%, var(--forest) 45%, #14361f 100%);}
+  .done .clock,.done .countdown-only{display:none;}
+  .celebrate{display:none;}
+  .done .celebrate{display:block; text-align:center; margin:34px auto 0;}
+  .celebrate .big{font-size:clamp(40px,9vw,76px); color:var(--gold); font-style:italic; line-height:1.05;}
+  .celebrate .cap{margin-top:18px; color:var(--panel); font-size:clamp(16px,3vw,22px);}
+
+  @media (max-width:560px){
+    .clock{grid-template-columns:repeat(2,1fr); gap:12px; max-width:360px;}
+    .tile{padding:18px 6px 12px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .spore{animation:none; display:none;}
+    .num{transition:none;}
+  }
+</style>
+</head>
+<body>
+  <div class="spores" id="spores" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <p class="eyebrow">PhD Defence <span class="leaf">&#10086;</span> Wageningen</p>
+    <h1>Counting down to <span class="accent">Dr. Hylke</span></h1>
+    <p class="subtitle">The public defence of Hylke Hessel Kortenbosch &mdash; the moment the thesis meets the committee.</p>
+
+    <div class="rule"><span>&#10086;</span></div>
+
+   <div class="dish">
+    <section class="clock" id="clock" aria-live="polite" aria-label="Time remaining until the defence">
+      <div class="tile"><span class="num" id="d">00</span><span class="lbl" id="dl">Days</span></div>
+      <div class="tile"><span class="num" id="h">00</span><span class="lbl" id="hl">Hours</span></div>
+      <div class="tile"><span class="num" id="m">00</span><span class="lbl" id="ml">Minutes</span></div>
+      <div class="tile"><span class="num" id="s">00</span><span class="lbl" id="sl">Seconds</span></div>
+    </section>
+
+    <div class="celebrate">
+      <div class="big">It&rsquo;s defence day!</div>
+      <div class="cap">Raise a glass to Dr.&nbsp;Hylke Hessel Kortenbosch.</div>
+    </div>
+   </div>
+
+
+    <p class="meta countdown-only">
+      <strong>Wednesday 1 July 2026, 13:00</strong>
+      <span class="where">Omnia Auditorium &middot; Hoge Steeg 2, Wageningen</span>
+    </p>
+
+    <p class="thesis">
+      <span class="title">&ldquo;Coldspot, hotspot or heatwave?&rdquo;</span><br>
+      The ecology of triazole resistance in <em>Aspergillus fumigatus</em>.
+    </p>
+
+    <p class="footer">Wageningen &middot; 2026</p>
+  </main>
+
+<script>
+  // Target: 2026-07-01 13:00 Europe/Amsterdam = 11:00 UTC (CEST, UTC+2)
+  var TARGET = Date.UTC(2026, 6, 1, 11, 0, 0);
+
+  var els = {
+    d:document.getElementById('d'), h:document.getElementById('h'),
+    m:document.getElementById('m'), s:document.getElementById('s'),
+    dl:document.getElementById('dl'), hl:document.getElementById('hl'),
+    ml:document.getElementById('ml'), sl:document.getElementById('sl')
+  };
+  var last = {};
+
+  function pad(n){return (n<10?'0':'')+n;}
+  function plural(n,w){return n===1?w.slice(0,-1):w;}
+
+  function set(el, val, lblEl, word){
+    var str = pad(val);
+    if(last[el.id] !== str){
+      el.textContent = str;
+      el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick');
+      last[el.id] = str;
+    }
+    if(lblEl) lblEl.textContent = plural(val, word);
+  }
+
+  function render(){
+    var diff = TARGET - Date.now();
+    if(diff <= 0){ document.body.classList.add('done'); return; }
+    var sec = Math.floor(diff/1000);
+    var days = Math.floor(sec/86400);
+    var hrs = Math.floor((sec%86400)/3600);
+    var mins = Math.floor((sec%3600)/60);
+    var secs = sec%60;
+    set(els.d, days, els.dl, 'Days');
+    set(els.h, hrs, els.hl, 'Hours');
+    set(els.m, mins, els.ml, 'Minutes');
+    set(els.s, secs, els.sl, 'Seconds');
+  }
+  render();
+  setInterval(render, 250);
+
+  // ambient spores
+  (function(){
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    var host = document.getElementById('spores');
+    var N = 18;
+    for(var i=0;i<N;i++){
+      var s = document.createElement('span');
+      s.className = 'spore';
+      var size = 4 + Math.random()*10;
+      s.style.width = size+'px'; s.style.height = size+'px';
+      s.style.left = (Math.random()*100)+'%';
+      s.style.setProperty('--drift', (Math.random()*120-60)+'px');
+      s.style.animationDuration = (14 + Math.random()*16)+'s';
+      s.style.animationDelay = (-Math.random()*22)+'s';
+      host.appendChild(s);
+    }
+  })();
+</script>
+</body>
+</html>
