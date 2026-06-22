@@ -6,3 +6,5 @@ test*.gif
 out.gif
 preview_*.png
 gif_*.png
+
+.DS_Store
