@@ -27,7 +27,7 @@ const DEFAULT_TARGET = Date.UTC(2026, 6, 1, 11, 0, 0);
 
 // Theme tokens (match the invitation emails)
 const C = {
-  bgTop: '#235539', bg: '#1f4d2e', bgBot: '#163a22',
+  bgTop: '#1f4d2e', bg: '#1f4d2e', bgBot: '#163a22',
   panel: '#faf8f3', card: '#ede4c9', cardEdge: '#e0d6b8',
   forest: '#1f4d2e', sage: '#8fb872', sageLight: '#a3c585',
   terra: '#a82c2c', ink: '#2a2a2a', gold: '#c8a24a', cream: '#e7e0cb'
@@ -122,7 +122,7 @@ function drawFrame(ctx, parts, done) {
   }
 
   // footer line
-  ctx.fillStyle = C.cream;
+  ctx.fillStyle = '#ede4c9';   // matches the email's green-header date tint
   ctx.font = '13px Gelasio';
   ctx.fillText('Wednesday 1 July 2026, 13:00 \u00b7 Omnia, Wageningen', W / 2, H - 16);
 }
