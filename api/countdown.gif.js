@@ -10,8 +10,17 @@
 //   ?to=2026-07-01T11:00:00Z   target instant (UTC ISO); default = the defence
 //   &frames=30                 number of 1-second frames (default 30, max 60)
 
-const { createCanvas } = require('@napi-rs/canvas');
+const path = require('path');
+const { createCanvas, GlobalFonts } = require('@napi-rs/canvas');
 const { GIFEncoder, quantize, applyPalette } = require('gifenc');
+
+// Serverless runtimes (Vercel/Lambda) ship with NO system fonts, so canvas
+// silently draws nothing for text unless we register a bundled font first.
+// Gelasio is metrically compatible with Georgia and OFL-licensed.
+const FONT_DIR = path.join(__dirname, 'fonts');
+GlobalFonts.registerFromPath(path.join(FONT_DIR, 'Gelasio-Regular.ttf'), 'Gelasio');
+GlobalFonts.registerFromPath(path.join(FONT_DIR, 'Gelasio-Bold.ttf'), 'Gelasio Bold');
+GlobalFonts.registerFromPath(path.join(FONT_DIR, 'Gelasio-Italic.ttf'), 'Gelasio Italic');
 
 // Defence: 2026-07-01 13:00 Europe/Amsterdam (CEST, UTC+2) = 11:00:00 UTC
 const DEFAULT_TARGET = Date.UTC(2026, 6, 1, 11, 0, 0);
@@ -70,15 +79,15 @@ function drawFrame(ctx, parts, done) {
   // eyebrow
   ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
   ctx.fillStyle = C.sageLight;
-  ctx.font = '12px Georgia, serif';
+  ctx.font = '12px Gelasio';
   drawSpaced(ctx, 'COUNTDOWN TO DR. HYLKE', W / 2, 34, 3);
 
   if (done) {
     ctx.fillStyle = C.gold;
-    ctx.font = 'italic 42px Georgia, serif';
+    ctx.font = '42px "Gelasio Italic"';
     ctx.fillText("It's defence day!", W / 2, H / 2 + 6);
     ctx.fillStyle = C.cream;
-    ctx.font = '15px Georgia, serif';
+    ctx.font = '15px Gelasio';
     ctx.fillText('Wednesday 1 July 2026 \u00b7 Wageningen', W / 2, H / 2 + 36);
     return;
   }
@@ -102,11 +111,11 @@ function drawFrame(ctx, parts, done) {
 
     // number
     ctx.fillStyle = C.forest;
-    ctx.font = '46px Georgia, serif';
+    ctx.font = '46px Gelasio';
     ctx.fillText(parts[i], x + tileW / 2, y + 50);
     // label (manual even letter-spacing for a clean, kerned look)
     ctx.fillStyle = C.terra;
-    ctx.font = '10px Georgia, serif';
+    ctx.font = '10px Gelasio';
     drawSpaced(ctx, labels[i], x + tileW / 2, y + tileH - 14, 2.5);
 
     x += tileW + gap;
@@ -114,7 +123,7 @@ function drawFrame(ctx, parts, done) {
 
   // footer line
   ctx.fillStyle = C.cream;
-  ctx.font = '13px Georgia, serif';
+  ctx.font = '13px Gelasio';
   ctx.fillText('Wednesday 1 July 2026, 13:00 \u00b7 Omnia, Wageningen', W / 2, H - 16);
 }
 
